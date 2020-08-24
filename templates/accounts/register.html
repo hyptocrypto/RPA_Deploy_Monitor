@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registar</title>
+</head>
+<div class="container-contact100">
+
+	<div class="wrap-contact100">
+		<span class="contact100-form-title">
+			<h1>Register</h1>
+		</span>
+
+		<form method=post class="contact100-form validate-form">
+            {% csrf_token %}
+           {{ form|crispy }}
+		<div class="container-contact100-form-btn">
+			<button type="submit" class="contact100-form-btn">
+				<span>
+					<i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
+					Send
+				</span>
+			</button>
+		</div>
+	</div>
+</form>

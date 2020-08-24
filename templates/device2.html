@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<!--
+	Directive by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+
+		{% load static %}
+		<body class="is-preload">
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'images/icons/green_plane.ico' %}">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+		<title>Home</title>
+		<meta charset="utf-8" name='Description'  />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+	</head>
+
+	<body class="is-preload">
+    <nav class="navbar navbar-dark bg-primary">
+      <a class="navbar-brand" href="{% url 'admin:index'%}">Admin</a>
+      <a class="navbar-brand" href="{% url 'home'%}">Home</a>
+      <a class="navbar-brand" href="{% url 'deploy'%}">Deploy</a>
+      <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
+      </nav>
+      
+      <h1 style="font-size: xx-large;">{{device.serial_number}}</h1>
+		  
+      <span style="display:block; height: 50px;"></span>
+        <div style="width: 70%; margin: auto;" class="card">
+			
+        <h1>Image Control</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                       <form method="POST" name="docker_image_deploy">
+                            {% csrf_token %}
+                            Images
+                           {{ device_update_form.Images }}
+                           <button  type="submit" name="docker_image_deploy" class="btn btn-primary">Deploy</button>
+
+                       </form> 
+                    </div>
+                
+                
+                    <div style="text-align: center;" class="col-8"> 
+                        <div style="width: 70%; margin: auto;" class="card">
+                            <div class="container">
+                                {% for image in device.docker_images.all %}
+                                <div class="row">
+                                    <div class="col">
+                                        
+                                    
+                                        {{ image.image_name }}
+                                    
+                                    </div>
+                                
+                                    <div class="col">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div style="text-align: right;" class="col"> <button style="background-color: crimson;" type="submit" name="remove_docker_image_{{ image.image_name }}" class="btn btn-primary">Remove {{ image.image_name }}</button>
+                                            </div>
+                                    </div>
+                                </div>
+                                    {% endfor %}
+                          
+                        
+                        
+                        </div>
+                        </div>
+                    </div>
+                
+              
+       
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div style="text-align: right;" class="col"> <button style="background-color: crimson;" type="submit" name="docker_destroy" class="btn btn-primary">Destroy Docker</button></div>
+                </div>
+            </form>
+
+
+
+
+            </div>
+                </div>
+            </div>
+        
+        <span style="display:block; height: 50px;"></span>
+        <div style="width: 70%; margin: auto;" class="card">
+            <div id="card-header" >
+            <h1>Status</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                <p><u><b>Online:</u></b> {% if device.online == True %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                      </svg>						
+                    {% else %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                      <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                      </svg>
+                    {% endif %}
+                    </p>   
+                </div>
+                <div class="col">
+                    
+                </div>
+                <div class="col">
+                    <u>Management Port</u>     
+                </div>
+                <div class="col">
+                <u>Call Home Port</u>   
+                </div>
+                <div class="col">
+                <u>Assignged To</u> 
+                </div>
+                </div>
+                
+
+
+                <div class="row">
+                    <div class="col">
+                <p><u><b>Deployed:</u></b> {% if device.deployed == True %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                      </svg>						
+                    {% else %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                      <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                      </svg>
+                    {% endif %}
+                    </p>   
+                
+                </div>
+                <div class="col">
+                    
+                </div>
+                <div class="col">
+                    {{ device.management_port}}
+                </div>
+                <div class="col">
+                 
+                    {{ device.call_home_port }}
+                </div>
+                <div class="col">
+                   
+                    {{ device.assigned_to_user }}
+                    
+                </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                <p><u><b>Idle:</u></b> {% if device.idle == True %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                      </svg>						
+                    {% else %}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                      <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                      </svg>
+                    {% endif %}
+                    </p>   
+          
+                </div>
+                
+                <div class="col">
+                    <form method="POST">
+                   
+                
+                </div>
+                <div class="col">
+                    {% csrf_token %}
+                    {{ device_update_form.Management_Port }}
+                    
+                </div>
+                <div class="col">
+                    {% csrf_token %}
+                    {{ device_update_form.Call_Home_Port }}
+                   
+                </div>
+                <div class="col">
+                    {% csrf_token %}
+                    {{ device_update_form.Assigned_To_User }}
+                    
+                </div>
+            
+                </div>
+            </div>
+            <div class="row">
+                <div style="text-align: center;" class="col">
+                    <button type="submit" name="reset_to_idle" class="btn btn-primary">Reset To Idle</button>
+                </div>
+                <div class="col">
+                    
+                </div>
+                <div class="col">
+                    <button type="submit" name="update_management_port" class="btn btn-primary">Update</button>
+                </div>
+                <div class="col">
+                    <button type="submit" name="update_call_home_port" class="btn btn-primary">Update</button>
+                </div>
+                <div class="col">
+                    <button type="submit" name="update_assigned_to_user" class="btn btn-primary">Update</button>
+                </div>
+            </form> 
+            </div>
+            </div>
+        </div>
+        <span style="display:block; height: 50px;"></span>
+        <div style="width: 70%; margin: auto;" class="card">
+            <div id="card-header bg-success"></div>
+        <h1>Tracking</h1>
+        <table class="table">
+            <thead class=" thread-dark table-bordered ">
+            <tr class="text-light bg-dark">
+                <th scope="col" style="text-align: center;">Tracking Outbond</th>
+                <th scope="col" style="text-align: center;">Tracking Inbound</th>
+                <tr>
+                    {% if device.tracking_number_out != 'N/A' %}
+                    <td style="text-align: center;"><a href="https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber={tracking_number_out}" 
+                        target="_blank">
+                               {{device.tracking_number_out}}
+                       </a></td>
+                    {% else %}
+                       <td style="text-align: center;">N/A</td>
+                    {% endif %}
+                    {% if device.tracking_number_in != 'N/A' %}
+                    <td style="text-align: center;"><a href="https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber={tracking_number_in}" 
+                        target="_blank">
+                               {{device.tracking_number_in}}
+                       </a></td>
+                    {% else %}
+                       {% if device.tracking_number_out == 'N/A' %}
+                       <td style="text-align: center;">N/A</td>
+                       {% else %}
+                       <form method="POST">
+                        {% csrf_token %}
+                       <td style="text-align: center;"><button type="submit" name="ship_home" class="btn btn-primary">Ship Home</button></td>
+                        </form> 
+                       {% endif %}
+                    {% endif %}
+                </tr>
+            </thead>
+                </div>
+            </div>
+        </div>
+                
+
+<!-- Scripts -->
+<!-- <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/browser.min.js' %}"></script>
+<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+    
+</body>
+</html>

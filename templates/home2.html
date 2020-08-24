@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<!--
+	Directive by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+
+		{% load static %}
+		<body class="is-preload">
+	
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">		<title>Home</title>
+		<meta charset="utf-8" name='Description'  />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+	</head>
+
+	<body class="is-preload">
+        <nav class="navbar navbar-dark bg-primary">
+            <a class="navbar-brand" href="{% url 'admin:index'%}">Admin</a>
+            <a class="navbar-brand" href="{% url 'home'%}">Home</a>
+            <a class="navbar-brand" href="{% url 'deploy'%}">Deploy</a>
+            <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
+          </nav>
+          
+		<!-- Header -->
+			<div style="padding: 15px;">
+                <span style="display:block; height: 25px;"></span>
+				<h1 style=font-size:24pt >Monitor Devices</h1>
+		
+                <table class="table">
+                    <thead class=" thread-dark table-bordered ">
+                    <tr class="text-light bg-dark">
+                        <th scope="col">Online</th>
+                        <th scope="col">Deployed</th>
+                        <th scope="col">Serial</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Assigned To</th>
+                        <th scope="col">Tracking Outbound</th>
+                        <th scope="col">Tracking Inbound</th>
+                        <th scope="col">More Info</th>
+                    </tr>
+                    </thead>
+                    {% for device in object_list %}
+                    <tr class="text-dark">
+                        <td>{% if device.online == True %}
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>						
+                            {% else %}
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                                </svg>
+                            
+                            {% endif %}</td>
+                        <td>{% if device.deployed == True %}
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>						
+                            {% else %}
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                                </svg>
+                            
+                            {% endif %}</td>
+                        <td>{{device.serial_number}}</td>
+                        <td>{{device.assigned_to_client}}</td>
+                        <td>{{device.assigned_to_user}}</td>
+                        {% if device.tracking_number_out != 'N/A' %}
+                        <td><a href="https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber={tracking_number_out}" 
+                            target="_blank">
+                                   {{device.tracking_number_out}}
+                           </a></td>
+                        {% else %}
+                           <td>N/A</td>
+                        {% endif %}
+                        {% if device.tracking_number_in != 'N/A' %}
+                        <td><a href="https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber={tracking_number_in}" 
+                            target="_blank">
+                                   {{device.tracking_number_in}}
+                           </a></td>
+                        {% else %}
+                           <td>N/A</td>
+                        {% endif %}
+                        <td><a href="{% url 'monitor' device.slug %}">More</a></td>
+                    
+
+                    </tr>
+                    {% endfor %}
+                    
+
+
+
+                </table>
+
+
+
+
+            </div>
+
+
+<!-- Scripts -->
+<!-- <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/browser.min.js' %}"></script>
+<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	</body>
+</body>
+</html>
